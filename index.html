@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Entry: Guy Livne</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: normal;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #aaaaaa;
+        }
+        button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 15px 40px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: white;
+            color: black;
+        }
+        button:disabled {
+            background-color: #555;
+            color: #aaa;
+            border-color: #555;
+            cursor: wait;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>System Entry: Guy Livne</h1>
+    <p># Guy Livne has made it home<br>Have a nice weekend</p>
+    
+    <button id="actionBtn">PRESS AND WAIT</button>
+
+    <script>
+        document.getElementById('actionBtn').addEventListener('click', function() {
+            var btn = this;
+            btn.innerText = 'WAITING...';
+            btn.disabled = true;
+            
+            // ממתין שנייה וחצי כדי לדמות טעינה, ואז מעביר לכתובת המבוקשת
+            setTimeout(function() {
+                window.location.href = 'https://easy.co.il/page/24824077';
+            }, 1500);
+        });
+    </script>
+
+</body>
+</html>
