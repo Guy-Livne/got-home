@@ -6,67 +6,159 @@
     <title>System Entry: Guy Livne</title>
     <style>
         body {
+            margin: 0;
+            padding: 0;
             background-color: black;
             color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Courier New', Courier, monospace; /* Changed to a terminal-style font */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            margin: 0;
             text-align: center;
+            overflow: hidden; /* Prevents scrollbars from the canvas */
         }
+        
+        /* The canvas for the matrix background effect */
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1; /* Puts the matrix behind the text and button */
+        }
+
+        /* Container to keep text readable over the matrix */
+        .content {
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.75);
+            padding: 40px;
+            border-radius: 10px;
+            border: 1px solid #0f0;
+            box-shadow: 0 0 20px #0f0;
+        }
+
         h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            font-weight: normal;
+            font-weight: bold;
+            color: #0f0; /* Matrix Green */
+            text-shadow: 0 0 5px #0f0;
         }
+        
         p {
             font-size: 1.2rem;
             margin-bottom: 3rem;
-            color: #aaaaaa;
+            color: #ccc;
         }
+        
         button {
             background-color: transparent;
-            color: white;
-            border: 2px solid white;
+            color: #0f0;
+            border: 2px solid #0f0;
             padding: 15px 40px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 1.2rem;
             font-family: inherit;
+            font-weight: bold;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 5px;
             transition: all 0.3s ease;
+            box-shadow: 0 0 10px #0f0 inset, 0 0 10px #0f0;
         }
+        
         button:hover {
-            background-color: white;
+            background-color: #0f0;
             color: black;
+            box-shadow: 0 0 20px #0f0 inset, 0 0 20px #0f0;
         }
+        
         button:disabled {
-            background-color: #555;
-            color: #aaa;
-            border-color: #555;
+            background-color: #003300;
+            color: #555;
+            border-color: #003300;
             cursor: wait;
+            box-shadow: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>System Entry: Guy Livne</h1>
-    <p># Guy Livne has made it home<br>Have a nice weekend</p>
+    <canvas id="matrix"></canvas>
     
-    <button id="actionBtn">PRESS AND WAIT</button>
+    <div class="content">
+        <h1>System Entry: Guy Livne</h1>
+        <p>> Guy Livne has made it home_<br>> Have a nice weekend</p>
+        
+        <button id="actionBtn">PRESS AND WAIT</button>
+    </div>
 
     <script>
+        /* --- Matrix Effect JavaScript --- */
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        // Make canvas full screen
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Characters to use in the matrix (Katakana + Latin + Numbers)
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%""\'#&_(),.;:?!\\|{}<>[]^~';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize; // Number of columns for the rain
+
+        // Array to track the Y coordinate of each drop
+        const drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        // Draw the matrix rain
+        function drawMatrix() {
+            // Translucent black background creates the fading trail effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0'; // Green text
+            ctx.font = fontSize + 'px monospace';
+
+            // Loop over the drops
+            for (let i = 0; i < drops.length; i++) {
+                // Pick a random character
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                
+                // Draw the character
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Send the drop back to the top randomly after it crosses the screen
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                // Move drop down
+                drops[i]++;
+            }
+        }
+
+        // Run the animation
+        setInterval(drawMatrix, 35);
+
+        // Adjust canvas size if the user resizes their browser window
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        /* --- Button Redirect JavaScript --- */
         document.getElementById('actionBtn').addEventListener('click', function() {
             var btn = this;
             btn.innerText = 'WAITING...';
             btn.disabled = true;
             
-            // ממתין שנייה וחצי כדי לדמות טעינה, ואז מעביר לכתובת המבוקשת
+            // Wait 1.5 seconds, then redirect to Easy.co.il
             setTimeout(function() {
                 window.location.href = 'https://easy.co.il/page/24824077';
             }, 1500);
